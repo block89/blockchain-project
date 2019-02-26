@@ -15,8 +15,8 @@ genesis_block = {
 
 blockchain = [genesis_block]
 open_transactions = []
-owner = 'M'
-participants = {'M'}
+owner = 'B89'
+participants = {'B89'}
 
 def valid_proof(transactions, last_hash, proof):
     guess = str(transactions) + str(last_hash) + str(proof).encode()
@@ -31,10 +31,6 @@ def proof_of_work():
     while not valid_proof(open_transactions, last_hash, proof):
         proof += 1
     return proof
-
-#def hash_block(block):
-   # return hl.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
-    #'-'.join([str(block[key]) for key in block])
 
 def get_balance(participant):
     tx_sender = [[tx['amount'] for tx in block['transactions'] if tx['sender'] == participant] for block in blockchain]
@@ -67,11 +63,6 @@ def add_transaction(recipient, sender=owner, amount=1.0):
         :amount: the amount of coins sent in transaction
 
     """  
- #   transaction = {
- #       'sender': sender, 
- #       'recipient': recipient,
- #       'amount': amount
- #   }
     transaction = OrderedDict([('sender', sender), ('recipient', recipient), ('amount', amount)])
     
     if verify_transaction(transaction):
@@ -87,20 +78,10 @@ def mine_block():
     last_block = blockchain[-1]
     hashed_block = hash_block(last_block)
     proof = proof_of_work()
-#    reward_transaction = {
-#        'sender': 'MINING',
-#        'recipient': owner,
-#        'amount': MINING_REWARD
-#    }
     reward_transaction = OrderedDict([('sender', 'MINING'), ('recipient', owner), ('amount', MINING_REWARD)])
-   
    
     copied_transaction = open_transactions[:]
     copied_transaction.append(reward_transaction)
-    
-    #for key in last_block:
-    #    value = last_block[key]
-    #    hashed_block = hashed_block + str(value)
     
     block = {
         'previous_hash': hashed_block, 
@@ -181,7 +162,7 @@ while waiting_for_input:
         print_blockchain_elements()
         print('Invalid blockchain!')
         break
-    print('Balance of {}: {:6.2f}'.format('M',get_balance('M')))
+    print('Balance of {}: {:6.2f}'.format('B89',get_balance('B89')))
 else:
     print('User left!')
 
